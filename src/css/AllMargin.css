@@ -1,0 +1,12 @@
+html, *{
+    margin:0;
+    padding: 0;
+}
+body{
+    font-family: 'MoneyGraphy', sans-serif;
+}
+@font-face {
+    font-family: 'MoneyGraphy';
+    src: url('../fonts/Moneygraphy-Rounded.woff2') format('woff2');
+    font-display: swap;
+}
