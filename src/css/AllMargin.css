@@ -10,3 +10,22 @@ body{
     src: url('../fonts/Moneygraphy-Rounded.woff2') format('woff2');
     font-display: swap;
 }
+.logo{
+    width:130px;
+    position: absolute;
+    top:40%;
+    left:13%
+}
+.profil{
+    width:130px;
+    position: absolute;
+    top:41%;
+    left:38%;
+    border-radius:50%;
+}
+.profilMg{
+    width:130px;
+    position: absolute;
+    top:35%;
+    left:45%;
+}
