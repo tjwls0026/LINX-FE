@@ -20,4 +20,7 @@ const Body = styled.div`
     width:100%;
     height:100vh;
     background: linear-gradient(110deg, #ffffff 1%, #f9bed8 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
 `
