@@ -5,7 +5,7 @@ import { Logo } from "../Components/Logo"
 import { BackgroundBox } from "../Components/BackgroundBox"
 import { SignUpText } from "../Components/SignUp/SignUpText"   
 
-export function SignUpPage() {
+export function SignUpPage3() {
     return(
         <Body>
             <Logo/>

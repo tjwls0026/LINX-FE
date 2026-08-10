@@ -4,7 +4,7 @@ import { TextBox } from "../TextBox";
 import { SignUpButton } from "./SignUpbutton";
 
 import name from "../../assets/name.svg"
-import { PassWordInput } from "./PassWordInput";
+import { PassWordInput } from "./PasswordInput";
 
 export function SignUpText() {
     return(

@@ -16,7 +16,7 @@ export function PassWordInput(){
     const isMetched = Password === passwordCheck;
     const isTouched = passwordCheck.length > 0 ;
 
-    const passwordNorz = /^(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$/
+    const passwordNorz = /^(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,20}$/ //비밀번호 유효성 검사를 위한 정규식
     const isPasswordTrue = passwordNorz.test(Password);
     const isPasswordTouched = Password.length > 0;
 
@@ -31,7 +31,7 @@ export function PassWordInput(){
                     <Input 
                         type={showPassword? "text" : "password"} // ture면 type=text false면 type=password를 출력
                         value={Password}
-                        onChange={(e)=>setPassword(e.target.value)}
+                        onChange={(e)=>setPassword(e.target.value)} //Password의 값을 업데이트 
                         placeholder="비밀번호를 입력하세요."
                     />
                     <EyesIcon
@@ -60,12 +60,13 @@ export function PassWordInput(){
                         onClick={()=>setReShowPassword(!reShowPassword)}
                     />
                 </TextBox>
+                {isTouched && !isMetched &&(
+                    <p style={{color:'red',fontSize:'13px'}}>비밀번호가 일치하지 않습니다.</p>
+                )}{isTouched && isMetched && (
+                    <p style={{color: 'green', fontSize:'13px'}}>비밀번호가 일치합니다.</p>
+                )}
             </AllBox>
-            {isTouched && !isMetched &&(
-                <p style={{color:'red',fontSize:'13px'}}>비밀번호가 일치하지 않습니다.</p>
-            )}{isTouched && isMetched && (
-                <p style={{color: 'green', fontSize:'13px'}}>비밀번호가 일치합니다.</p>
-            )}
+            
         </Div>
     )
 }
