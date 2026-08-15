@@ -67,7 +67,7 @@ const ErrorText = styled.div`
 const EmailErrorText = styled.div`
     display:flex;
     justify-content:center;
-    align-items:center;
+    align-self: flex-start;
     flex-direction:column;
     gap:10px;
 `

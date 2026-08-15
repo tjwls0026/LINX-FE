@@ -1,11 +1,18 @@
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 interface EmailButtonProps{
     onClick?:()=>void;
     onLoginClick?:()=>void;
 } // 클릭 하였을때 실행해야 하므로 함수형태로 저장 but 반면에 title이나 email등은 단순히 데이터이므로 string, number등으로 넘긴다. 
 
-export function EmailButton({onClick,onLoginClick}:EmailButtonProps) {
+export function EmailButton({onClick}:EmailButtonProps) {
+    const navigate = useNavigate();
+
+    const goLogIn =()=>{
+        onClick?.();
+        navigate("/LogIn")
+    }
     return(
         <All>
             <Body 
@@ -15,7 +22,7 @@ export function EmailButton({onClick,onLoginClick}:EmailButtonProps) {
             <Explanation>
                     <AfterSignUp>이미 회원이신가요?</AfterSignUp>
                     <LogIn
-                    onClick={onLoginClick}>
+                    onClick={goLogIn}>
                         로그인</LogIn>
             </Explanation>
         </All>

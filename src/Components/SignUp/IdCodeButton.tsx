@@ -8,6 +8,11 @@ interface IdCodeButtonProps {
 
 export function IdCodeButton({onLoginClick, code }: IdCodeButtonProps) {
     const navigate = useNavigate();
+
+    const goLogIn=()=>{
+        onLoginClick?.();
+        navigate("/LogIn");
+    }
     const functionNavigate = () => {
         navigate("/SignUp/step3", { state: { code } });
     }
@@ -18,7 +23,8 @@ export function IdCodeButton({onLoginClick, code }: IdCodeButtonProps) {
             </Body>
             <Explanation>
                 <AfterSignUp>이미 회원이신가요?</AfterSignUp>
-                <LogIn onClick={onLoginClick}>로그인</LogIn>
+                <LogIn onClick={goLogIn}
+                >로그인</LogIn>
             </Explanation>
         </All>
     )

@@ -6,13 +6,13 @@ import { useTimer } from "react-timer-hook";
 export function IdCode() {
     
 
-    const [values,setValues] = useState(["","","","","",""]);
+    const [values,setValues] = useState(["","","","","",""]); // 인증번호 배열
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     const CodeCheck = (e: React.ChangeEvent<HTMLInputElement>, index:number) => {
         const value = e.target.value;
 
-        if (!/^[0-9]?$/.test(value)) return;
+        if (!/^[0-9]?$/.test(value)) return; // 숫자만 입력되게
 
         const newValues = [...values];
         newValues[index] = value;

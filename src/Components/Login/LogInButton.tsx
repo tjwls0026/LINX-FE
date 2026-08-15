@@ -1,21 +1,21 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
-export function SignUpButton() {
+export function LogInButton() {
 
     const navigate = useNavigate();
 
-    const goLogIn=()=>{
-        navigate("/LogIn");
+    const goSignUp=()=>{
+        navigate("/SignUp/step1");
     }
     return(
         <All>
             <Body>
-                <Text>회원가입</Text>
+                <Text>로그인</Text>
             </Body>
             <Explanation>
-                    <AfterSignUp>이미 회원이신가요?</AfterSignUp>
-                    <LogIn onClick={goLogIn}>로그인</LogIn>
+                    <AlreadySignUp>아직 회원이 아니신가요?</AlreadySignUp>
+                    <SingUp onClick={goSignUp}>회원가입</SingUp>
             </Explanation>
         </All>
     )
@@ -44,12 +44,12 @@ const Explanation = styled.div`
     flex-direction:row;
     gap:3px;
 `
-const AfterSignUp = styled.div`
+const AlreadySignUp = styled.div`
     color:#949494;
     font-size: 13px;
     
 `
-const LogIn = styled.div`
+const SingUp = styled.div`
     color:#FF7EB6;
     font-size: 13px;
     `
