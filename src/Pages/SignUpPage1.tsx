@@ -22,7 +22,8 @@ export function SignUpPage1() {
             return;
         }
         setError("");
-        navigate("/SignUp/step2", { state : {email} })
+        navigate("/SignUp/step2", { state : {email} });
+        
     }
 
     return(

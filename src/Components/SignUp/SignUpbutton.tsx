@@ -52,4 +52,5 @@ const AfterSignUp = styled.div`
 const LogIn = styled.div`
     color:#FF7EB6;
     font-size: 13px;
+    cursor: pointer;
     `

@@ -52,4 +52,8 @@ const AlreadySignUp = styled.div`
 const SingUp = styled.div`
     color:#FF7EB6;
     font-size: 13px;
+    cursor: pointer;
     `
+
+
+

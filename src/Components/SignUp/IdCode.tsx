@@ -14,9 +14,9 @@ export function IdCode() {
 
         if (!/^[0-9]?$/.test(value)) return; // 숫자만 입력되게
 
-        const newValues = [...values];
-        newValues[index] = value;
-        setValues(newValues);
+        const newValues = [...values]; // 배열 복사 
+        newValues[index] = value; // value값을 newValues에 넣음
+        setValues(newValues); // 배열 안 값 변경
 
         if(value && index <inputRefs.current.length-1){
             inputRefs.current[index+1]?.focus();

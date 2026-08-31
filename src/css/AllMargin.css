@@ -1,9 +1,11 @@
 html, *{
     margin:0;
     padding: 0;
+    overflow:hidden;
 }
 body{
     font-family: 'MoneyGraphy', sans-serif;
+    overflow: hidden;
 }
 @font-face {
     font-family: 'MoneyGraphy';
