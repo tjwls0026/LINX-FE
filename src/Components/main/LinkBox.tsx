@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import hambugerIcon from "../../assets/hamberger.svg"
 import bocsaIcon from "../../assets/boksaIcon2.svg"
 import goIcon from "../../assets/goIcon2.svg"
+import { LinkSetting } from "./LinkSetting";
+import { useState } from "react";
 
 interface Link{
     url:string;
@@ -11,15 +13,24 @@ interface Link{
 }
 interface LinkBoxProps{
     link:Link;
+    onDelete : ()=>void
 }
-export function LinkBox({link}:LinkBoxProps) {
+export function LinkBox({link,onDelete}:LinkBoxProps) {
+    const [isSetting,setIsSetting] = useState(false);
     const copy = () => {
         navigator.clipboard.writeText(link.url);
         alert("링크가 복사되었습니다")
     }
+    const Link = () => {
+        window.open(link.url,"_blank");
+        setIsSetting(false);
+    }
     return(
-        <Body>
-            <Box>
+        <Body
+        onClick={()=>setIsSetting(false)}>
+            
+            <Box onClick={Link}>
+                
                 {link.img && (
                 <LinkImage src={link.img} alt="링크 이미지" />
                 )}
@@ -29,10 +40,18 @@ export function LinkBox({link}:LinkBoxProps) {
                     <Memo>{link.memo}</Memo>
                 </TitleBox>
             </Box>
-            <HambugerIcon>
-            <img src={hambugerIcon}
-            style={{width:"5px"}}></img>
+            <HambugerIcon
+                onClick={(e) => {
+                e.stopPropagation();
+                setIsSetting(true);
+            }}>
+                <img src={hambugerIcon}
+                style={{width:"5px"}}></img>
             </HambugerIcon>
+            { isSetting &&(
+                <LinkSetting
+                onDelete={onDelete}/>
+            ) }
             <BocsaIcon
             onClick={copy}>
                 <img src={bocsaIcon}
@@ -91,8 +110,13 @@ const TitleBox = styled.div`
 `
 const HambugerIcon = styled.div`
     position:absolute;
-    right:20px;
-    top:20px;
+    right:10px;
+    top:10px;
+    width:30px;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 `
 const BocsaIcon = styled.div`
     position:absolute;

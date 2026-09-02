@@ -92,6 +92,7 @@ const FolderPlusBox = styled.div`
     display:flex;
     align-items:center;
     gap:10px;    
+    cursor: pointer;
 `
 const FolderBox = styled.div<BoxProps>`
     width: 85%;

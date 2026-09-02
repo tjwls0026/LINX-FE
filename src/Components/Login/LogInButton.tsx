@@ -8,10 +8,14 @@ export function LogInButton() {
     const goSignUp=()=>{
         navigate("/SignUp/step1");
     }
+    const goMainPage = () =>{
+        navigate("/MainPage")
+    }
     return(
         <All>
             <Body>
-                <Text>로그인</Text>
+                <Text
+                onClick={goMainPage}>로그인</Text>
             </Body>
             <Explanation>
                     <AlreadySignUp>아직 회원이 아니신가요?</AlreadySignUp>

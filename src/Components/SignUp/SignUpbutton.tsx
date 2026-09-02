@@ -11,7 +11,8 @@ export function SignUpButton() {
     return(
         <All>
             <Body>
-                <Text>회원가입</Text>
+                <Text
+                onClick={goLogIn}>회원가입</Text>
             </Body>
             <Explanation>
                     <AfterSignUp>이미 회원이신가요?</AfterSignUp>

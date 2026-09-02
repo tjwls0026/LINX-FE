@@ -10,8 +10,13 @@ interface LinkAddProps {
 }
 export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
     const [img,setImg] = useState<string | null>(null);
-    const inputRef = useRef<HTMLInputElement>(null)
+    const [url, setUrl] = useState("");
+    const [title,setTitle] = useState("");
+    const [memo, setMemo] = useState("");
     const [isHovering, setIsHovering] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null)
+    const urlRegex = /^https?:\/\/.+/;
+    
     const ImgChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]; // 입력한 파일중 첫번째
         if(!file) return;
@@ -22,13 +27,13 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
             alert("URL과 제목은 필수입니다");
             return;
         }
+        if (!urlRegex.test(url)) {
+        alert("URL 형식을 확인해주세요");
+        return;
+    }
         onAdd({ url, title, memo: memo || null,img });
         onCancel(); // 추가 끝나면 모달 닫기
     }
-    const [url, setUrl] = useState("");
-    const [title,setTitle] = useState("");
-    const [memo, setMemo] = useState("");
-    
     return (
         <Body>
             <LinkBox>
@@ -64,7 +69,7 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
                     <UrlInput 
                     type="url"
                     placeholder="URL을 입력하세요"
-                    onChange={(e)=>setUrl(e.target.value)}>
+                    onChange={(e) => setUrl(e.target.value)}>
                         
                     </UrlInput>
                 </UrlBox>
@@ -103,7 +108,7 @@ const Body = styled.div`
     justify-content:center;
     align-items:center;
     background-color:rgba(0,0,0,0.5);
-    z-index:10;
+    z-index:100;
 `
 const LinkBox = styled.div`
     width:500px;
@@ -115,7 +120,7 @@ const LinkBox = styled.div`
     flex-direction:column;
 `
 const PicturesBox = styled.div`
-    
+    cursor: pointer;
 `
 const Img = styled.div`
     width:100px;
@@ -203,6 +208,7 @@ const CancelButton = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
+    cursor:pointer;
 `
 const PlusButton = styled.div`
     width:200px;
@@ -215,6 +221,7 @@ const PlusButton = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
+    cursor:pointer;
 `
 const ProfileInput = styled.input`
     width:150px;

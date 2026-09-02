@@ -2,9 +2,15 @@ import styled from "@emotion/styled";
 import { MiniLogoBox } from "../Components/MiniLogo"
 import { FolderCollection } from "../Components/main/FolderCollection"
 import { SearchBox } from "../Components/main/SearchBox";
+import { Profile } from "../Components/main/Profile";
+import { useNavigate } from "react-router-dom";
 
 
 export function MainPage () {
+    const navigate = useNavigate();
+    const handleGoProfile=()=>{
+        navigate("/MyPage")
+    }
     return(
         <Body>
             <MiniLogoBox/>
@@ -12,6 +18,10 @@ export function MainPage () {
             <Box>
                 <SearchBox/>
             </Box>
+            <ProfilBox
+            onClick={handleGoProfile}>
+                <Profile/>
+            </ProfilBox>
         </Body>
     )
 }
@@ -33,4 +43,9 @@ const Box = styled.div`
     left:22%;
     top:120px;
     
+`
+const ProfilBox = styled.div`
+    position:absolute;
+    right:30px;
+    top:30px;
 `

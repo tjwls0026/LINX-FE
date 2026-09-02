@@ -8,6 +8,7 @@ import { LinkPlus } from "./LinkPlus";
 import {LinkBox} from "../main/LinkBox"
 
 interface Link{
+    id:number;
     url:string;
     title:string;
     memo:string|null;
@@ -16,14 +17,28 @@ interface Link{
 export function SearchBox() {
     const [isClick, setIsClick]=useState(false);
     const [links,setLinks] = useState<Link[]>([]);
-
+    const [search, setSearch] = useState("");
+    
     const handleAddLinks = (link:Link) => {
-        setLinks(prev =>[...prev,link])
+        setLinks(prev =>[...prev,{
+            ...link,
+            id: Date.now() // 현재 시간을 링크의 id로 설정
+
+        }])
     }
+    const handleDelet =(id:number)=>{
+        setLinks(prev=>prev.filter(link=>link.id!==id));
+    }
+    const linkFilter = links.filter((link)=>
+        link.title.includes(search) ||
+        link.url.includes(search)
+    );
     return(
         <Body>
             <TopBox>
-                <Search></Search>
+                <Search
+                value={search}
+                onChange={(e)=> setSearch(e.target.value)}></Search>
                 <Plus
                 onClick={()=>setIsClick(true)}>
                     <Img src={plus}/>
@@ -36,10 +51,11 @@ export function SearchBox() {
                 )}
                 </TopBox>
             <LinkList>
-                {links.map((link, index) => (
+                {linkFilter.map((link) => (
                     <LinkBox
-                        key={index}
+                        key={link.id}
                         link={link}
+                        onDelete={()=>handleDelet(link.id)}                     
                     />
                 ))}
             </LinkList>
@@ -78,7 +94,7 @@ const Plus = styled.div`
     gap:10px;
     font-size:17px;
     color:#fff;
-    cursor:default;
+    cursor:pointer;
 `
 const Img = styled.img`
     width:20px;
