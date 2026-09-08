@@ -1,18 +1,21 @@
 import styled from "@emotion/styled";
 import "../../css/AllMargin.css"
 import { useRef, useState } from "react";
-
+import type {Link, Folder} from "../types/link"
 import profileEdit from "../../assets/profileedit.svg"
 
 interface LinkAddProps {
     onCancel: () => void;
-    onAdd:(link: {url:string; title:string, memo:string|null,img:string|null}) => void;
+    onAdd:(link: {url:string; title:string, memo:string|null,img:string|null, folderId:number|null}) => void; 
+    editLink? : Link;
+    folders: Folder[];
 }
-export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
-    const [img,setImg] = useState<string | null>(null);
-    const [url, setUrl] = useState("");
-    const [title,setTitle] = useState("");
-    const [memo, setMemo] = useState("");
+export function LinkPlus({onCancel,onAdd,editLink,folders}:LinkAddProps) {
+    const [img,setImg] = useState<string | null>(editLink?.img ?? null);
+    const [url, setUrl] = useState(editLink?.url ?? "");
+    const [title,setTitle] = useState(editLink?.title ?? "");
+    const [memo, setMemo] = useState(editLink?.memo ?? "");
+    const [folderId, setFolderId] = useState<number | null>(editLink?.folderId ?? null);
     const [isHovering, setIsHovering] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null)
     const urlRegex = /^https?:\/\/.+/;
@@ -31,7 +34,7 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
         alert("URL 형식을 확인해주세요");
         return;
     }
-        onAdd({ url, title, memo: memo || null,img });
+        onAdd({ url, title, memo: memo || null, img, folderId });
         onCancel(); // 추가 끝나면 모달 닫기
     }
     return (
@@ -69,6 +72,7 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
                     <UrlInput 
                     type="url"
                     placeholder="URL을 입력하세요"
+                    value={url}
                     onChange={(e) => setUrl(e.target.value)}>
                         
                     </UrlInput>
@@ -77,6 +81,7 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
                     <p style={{fontSize:"20px",marginLeft:"30px"}}>제목</p>
                     <TitleInput  
                     placeholder="제목을 입력하세요"
+                    value={title}
                     onChange={(e)=>setTitle(e.target.value)}>
                         
                     </TitleInput>
@@ -85,9 +90,21 @@ export function LinkPlus({onCancel,onAdd}:LinkAddProps) {
                     <p style={{fontSize:"20px",marginLeft:"30px"}}>메모(선택)</p>
                     <MemoInput
                     placeholder="메모를 입력하세요"
+                    value={memo}
                     onChange={(e)=>setMemo(e.target.value)}>
                     </MemoInput>
                 </MemoBox>
+                <FolderBox>
+                    <p style={{fontSize:"20px",marginLeft:"30px"}}>폴더 선택(선택)</p>
+                    <FolderSelect
+                    value={folderId ?? ""}
+                    onChange={(e)=> setFolderId(e.target.value === "" ? null : Number(e.target.value))}>
+                        <option value="">폴더 선택 안함</option>
+                        {folders.map((folder)=>(
+                            <option key={folder.id} value={folder.id}>{folder.name}</option>
+                        ))}
+                    </FolderSelect>
+                </FolderBox>
                 <ButtonBox>
                     <CancelButton
                     onClick={onCancel}>취소</CancelButton>
@@ -112,12 +129,15 @@ const Body = styled.div`
 `
 const LinkBox = styled.div`
     width:500px;
-    height:700px;
+    max-height:90vh;
     background-color:#fff;
     border-radius:30px;
     display:flex;
     gap:15px;
     flex-direction:column;
+
+    overflow-y:auto;
+    padding-bottom:10px;
 `
 const PicturesBox = styled.div`
     cursor: pointer;
@@ -189,6 +209,24 @@ const MemoInput = styled.input`
     &::placeholder{
         color:#BCBCBC;
     }
+`
+const FolderBox = styled.div`
+    display:flex;
+    gap:10px;   
+    flex-direction:column;
+`
+const FolderSelect = styled.select`
+    width:455px;
+    height:40px;
+    border:#E6E6E6 solid 2px;
+    border-radius:10px;
+    margin-left:30px;
+    outline:none;
+    font-family:inherit;
+    font-size:15px;
+    padding-left:10px;
+    background-color:#fff;
+    cursor:pointer;
 `
 const ButtonBox = styled.div`
     width:100%;

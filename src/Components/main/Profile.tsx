@@ -10,6 +10,6 @@ export function Profile(){
 const Body = styled.div`
     background-color:#000;
     border-radius:50%;
-    width:100px;
-    height:100px;
+    width:90px;
+    height:90px;
 `

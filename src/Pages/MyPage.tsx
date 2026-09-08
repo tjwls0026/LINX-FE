@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import '../css/AllMargin.css'
 
 import { ProfileBox } from '../Components/MyPage/ProfileBox'
 import { MiniLogoBox } from "../Components/MiniLogo";
@@ -19,4 +20,4 @@ const Div = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
-`
+`   

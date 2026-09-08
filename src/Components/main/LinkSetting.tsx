@@ -1,22 +1,19 @@
 import styled from "@emotion/styled";
-import folderGoIcon from "../../assets/folderGoIcon.svg"
 import folderEditIcon from "../../assets/folderEditIcon.svg"
 import defaultIcon from "../../assets/trashIcon.svg"
 
 interface LinkSettingProps{
     onDelete : ()=>void;
+    onEdit : ()=>void;
 }
-export function LinkSetting({onDelete}:LinkSettingProps){
+export function LinkSetting({onDelete,onEdit}:LinkSettingProps){
     return (
         <Body>
-                <EditBox>
+                <EditBox
+                onClick={onEdit}>
                     <img src={folderEditIcon}/>
                     <p>링크 수정</p>
                 </EditBox>
-                <FolderGoBox>
-                    <img src={folderGoIcon}/>
-                    <p>폴더 이동</p>
-                </FolderGoBox>
                 <Sun></Sun>
                 <DeBox
                 onClick={onDelete}>
@@ -31,7 +28,7 @@ export function LinkSetting({onDelete}:LinkSettingProps){
 }
 const Body = styled.div`
     width:150px;
-    height:150px;
+    height:100px;
     background-color:#fff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.20);
     border-radius:10px;
@@ -61,17 +58,7 @@ const EditBox = styled.div`
     
 
 `
-const FolderGoBox = styled.div`
-    width:100%;
-    height:100px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:5px;
-    &:hover{
-        background-color:#ededed;
-    }
-`
+
 const Sun = styled.div`
     width:80px;
     height:0px;

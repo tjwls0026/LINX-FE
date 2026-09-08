@@ -3,18 +3,27 @@ import { useRef, useState } from "react";
 
 import pofile from '../../assets/profile.svg'
 import profileEdit from '../../assets/profileedit.svg'
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import type { SignUpState } from "../types/SignUp";
+import { LogOutBox } from "./LogOutBox";
 
 export function ProfileBox(){
     const [img,setImg] = useState<string | null>(null);
     const [isHovering, setIsHovering] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [isLogin, setIsLogin] = useState(false);
 
     const [isTouch,setIsTouch] = useState(false);
 
     const location =useLocation();
+    const navigate = useNavigate();
     const {email} = (location.state as SignUpState) ??  {email:""};
+
+    const handleLogout = () => {
+        // TODO: 실제 로그아웃 처리(토큰 삭제 등) 연결
+        setIsLogin(false);
+        navigate("/LogIn");
+    }
     const ImgChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]; // 입력한 파일중 첫번째
         if(!file) return;
@@ -50,6 +59,7 @@ export function ProfileBox(){
                 </Email>
             </NameEmailBox>
             <LogoutTextBox
+            onClick={()=>setIsLogin(true)}
             onMouseOver={()=>setIsTouch(true)}
             onMouseOut={()=> setIsTouch(false)}
             style={{backgroundColor: isTouch ? '#FF4848':'#fff'
@@ -57,8 +67,13 @@ export function ProfileBox(){
                 color: isTouch ? '#fff' : '#FF4848'
             }}>
                 <p style={{fontSize:"15px"}}>로그아웃</p>
-                
             </LogoutTextBox>
+            {isLogin && (
+                <LogOutBox
+                email={email}
+                onCancel={()=>setIsLogin(false)}
+                onConfirm={handleLogout}/>
+            )}
         </Body>
     )
 }

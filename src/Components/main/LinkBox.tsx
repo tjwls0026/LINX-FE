@@ -2,31 +2,51 @@ import styled from "@emotion/styled";
 import hambugerIcon from "../../assets/hamberger.svg"
 import bocsaIcon from "../../assets/boksaIcon2.svg"
 import goIcon from "../../assets/goIcon2.svg"
+import gojung from "../../assets/gojung.svg"
+import fullgojung from "../../assets/fullgojung.svg"
 import { LinkSetting } from "./LinkSetting";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Link{
     url:string;
     title:string;
     memo:string|null;
-    img
+    img;
+    pinned:boolean;
+    clickCount:number;
 }
 interface LinkBoxProps{
     link:Link;
-    onDelete : ()=>void
+    onDelete : ()=>void;
+    onEdit : () =>  void;
+    onTogglePin : () => void;
+    onClickLink? : () => void;
 }
-export function LinkBox({link,onDelete}:LinkBoxProps) {
+export function LinkBox({link,onDelete,onEdit,onTogglePin,onClickLink}:LinkBoxProps) {
     const [isSetting,setIsSetting] = useState(false);
+    const boxRef = useRef<HTMLDivElement>(null);
     const copy = () => {
         navigator.clipboard.writeText(link.url);
         alert("링크가 복사되었습니다")
     }
     const Link = () => {
         window.open(link.url,"_blank");
+        onClickLink?.();
         setIsSetting(false);
     }
+    useEffect(() => {
+        if (!isSetting) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            if (boxRef.current && !boxRef.current.contains(e.target as Node)) {
+                setIsSetting(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isSetting]);
     return(
         <Body
+        ref={boxRef}
         onClick={()=>setIsSetting(false)}>
             
             <Box onClick={Link}>
@@ -39,7 +59,19 @@ export function LinkBox({link,onDelete}:LinkBoxProps) {
                     <Title>{link.title}</Title>
                     <Memo>{link.memo}</Memo>
                 </TitleBox>
+                <ClickCount>클릭 {link.clickCount}회</ClickCount>
             </Box>
+            <LinkGojung
+                onClick={(e)=>{
+                    e.stopPropagation();
+                    onTogglePin();
+                }}>
+                {link.pinned ? (
+                    <img src={fullgojung}/>
+                ): ( 
+                    <img src={gojung}/>
+                )}
+            </LinkGojung>
             <HambugerIcon
                 onClick={(e) => {
                 e.stopPropagation();
@@ -50,7 +82,8 @@ export function LinkBox({link,onDelete}:LinkBoxProps) {
             </HambugerIcon>
             { isSetting &&(
                 <LinkSetting
-                onDelete={onDelete}/>
+                onDelete={onDelete}
+                onEdit={onEdit}/>
             ) }
             <BocsaIcon
             onClick={copy}>
@@ -58,7 +91,10 @@ export function LinkBox({link,onDelete}:LinkBoxProps) {
                 style={{width:"25px"}}/>
                 </BocsaIcon>    
             <GoIcon
-            onClick={()=>window.open(link.url,"_blank")}>
+            onClick={()=>{
+                window.open(link.url,"_blank");
+                onClickLink?.();
+            }}>
                 <img src={goIcon}
                 style={{width:"25px"}}/>
             </GoIcon>
@@ -103,6 +139,11 @@ const LinkImage = styled.img`
     object-fit: cover;
     border-radius: 20px;
 `
+const ClickCount = styled.div`
+    color:#B0B0B0;
+    font-size:14px;
+    margin-top:10px;
+`
 const TitleBox = styled.div`
     display:flex;
     flex-direction:column;
@@ -129,4 +170,17 @@ const GoIcon = styled.div`
     right:20px;
     bottom:10px;
     cursor: pointer;
+`
+const LinkGojung = styled.div`
+    position:absolute;
+    right:35px;
+    top:10px;
+    width:30px;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    img{
+        width:120px;
+    }
 `

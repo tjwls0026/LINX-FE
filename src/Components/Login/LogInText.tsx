@@ -34,7 +34,7 @@ export function LogInText({value, onChange}:LogInTextProps) {
                 </TextBox>
             </Emailinput>
             <PasswordInput>
-                <Email>이메일</Email>   
+                <Email>비밀번호</Email>   
                 <TextBox>
                     <PassWordImg src={password}/>
                     <Input 
