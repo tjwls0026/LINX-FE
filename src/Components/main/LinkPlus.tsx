@@ -26,15 +26,15 @@ export function LinkPlus({onCancel,onAdd,editLink,folders}:LinkAddProps) {
         setImg(URL.createObjectURL(file)); 
     }
     const handleAdd = () => {
-        if (!url.trim() || !title.trim()) {
+        if (!url.trim() || !title.trim()) { // 둘 중 하나라도 비어있으면 여기서 막고 밑으로 안내려감
             alert("URL과 제목은 필수입니다");
             return;
         }
-        if (!urlRegex.test(url)) {
+        if (!urlRegex.test(url)) { // http:// 나 https://로 시작하는지 정규식으로 검사, 이 정규식 부분이 처음엔 뭘 검사하는건지 이해가 잘 안갔음
         alert("URL 형식을 확인해주세요");
         return;
     }
-        onAdd({ url, title, memo: memo || null, img, folderId });
+        onAdd({ url, title, memo: memo || null, img, folderId }); // memo가 빈 문자열이면 null로 바꿔서 넘김 (저장할 때 값 없는거랑 빈 글자 구분하려고)
         onCancel(); // 추가 끝나면 모달 닫기
     }
     return (

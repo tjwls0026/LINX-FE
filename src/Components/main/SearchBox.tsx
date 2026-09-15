@@ -36,12 +36,12 @@ export function SearchBox({
     const [sortOption, setSortOption] = useState<SortOption>("latest");
 
     const handleAdd = (link: { url: string; title: string; memo: string | null; img: string | null; folderId: number | null }) => {
-        if (editLink) {
+        if (editLink) { // 수정 모드로 들어온 거면 기존 링크에 새로 입력한 값만 덮어씀
             onEditLink({ ...editLink, ...link });
-        } else {
+        } else { // 수정 모드 아니면 새 링크로 추가, pinned는 항상 false로 시작
             onAddLink({ ...link, pinned: false });
         }
-        setEditLink(null);
+        setEditLink(null); // 여기서 다시 null로 안 돌려놓으면 다음에 추가 눌러도 계속 수정모드로 남아있어서 헷갈렸던 부분
     }
 
     const handleClose = () => {
@@ -72,8 +72,8 @@ export function SearchBox({
             link.title.includes(search) ||
             link.url.includes(search)
         )
-        .sort(sortCompare)
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned)); // 고정된 링크가 맨 앞으로 (정렬 기준보다 우선)
+        .sort(sortCompare) // 드롭다운에서 고른 기준(최신순/오래된순/방문많은순 등)으로 먼저 정렬
+        .sort((a, b) => Number(b.pinned) - Number(a.pinned)); // 그다음 고정된 링크만 맨 앞으로 뺌 (정렬 기준보다 우선). sort를 두번 거는게 왜 순서가 안깨지는지 처음엔 이해가 안갔는데, sort가 안정정렬이라 pinned값이 같으면 앞에서 정한 순서가 그대로 유지되는거였음
 
     return (
         <Body>

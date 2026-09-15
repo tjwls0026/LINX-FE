@@ -27,7 +27,7 @@ export function SignUpPage2() {
                     </Div>
                 </Body1>
                 <IdCode/>
-                <IdCodeButton/>
+                <IdCodeButton email={email}/>
             </IdCodeBackgroundBox>
         </Body>
     )

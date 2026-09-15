@@ -8,7 +8,7 @@ import type { SignUpState } from "../types/SignUp";
 import { LogOutBox } from "./LogOutBox";
 
 export function ProfileBox(){
-    const [img,setImg] = useState<string | null>(null);
+    const [img,setImg] = useState<string | null>(() => localStorage.getItem("profileImg"));
     const [isHovering, setIsHovering] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const [isLogin, setIsLogin] = useState(false);
@@ -17,7 +17,20 @@ export function ProfileBox(){
 
     const location =useLocation();
     const navigate = useNavigate();
-    const {email} = (location.state as SignUpState) ??  {email:""};
+    const {email:locEmail} = (location.state as SignUpState) ??  {email:""};
+
+    // 회원가입 때 저장해둔 이름/이메일/가입일을 불러온다 (없으면 이동 시 넘어온 email로 대체)
+    const storedProfile = localStorage.getItem("userProfile");
+    const parsedProfile = storedProfile
+        ? (JSON.parse(storedProfile) as { name?: string; email?: string; joinedAt?: number })
+        : null;
+    const email = parsedProfile?.email || locEmail;
+    const joinedAt = parsedProfile?.joinedAt;
+
+    const [name, setName] = useState(parsedProfile?.name || "");
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [nameDraft, setNameDraft] = useState(name);
+    const nameInputRef = useRef<HTMLInputElement>(null);
 
     const handleLogout = () => {
         // TODO: 실제 로그아웃 처리(토큰 삭제 등) 연결
@@ -27,7 +40,34 @@ export function ProfileBox(){
     const ImgChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]; // 입력한 파일중 첫번째
         if(!file) return;
-        setImg(URL.createObjectURL(file)); 
+        const reader = new FileReader();
+        reader.onload = () => {
+            const dataUrl = reader.result as string;
+            setImg(dataUrl);
+            // 메인페이지 등 다른 화면에서도 쓸 수 있도록 저장
+            localStorage.setItem("profileImg", dataUrl);
+        };
+        reader.readAsDataURL(file);
+    }
+    const startEditName = () => {
+        setNameDraft(name);
+        setIsEditingName(true);
+        // input이 렌더된 다음 프레임에 포커스
+        setTimeout(()=> nameInputRef.current?.focus(), 0);
+    }
+    const saveName = () => {
+        const trimmed = nameDraft.trim();
+        const nextName = trimmed || name; // 공백만 입력하고 저장하면 trimmed가 빈 문자열("")이라 falsy로 취급돼서 원래 이름(name)으로 되돌아감. 왜 빈 이름으로 안바뀌는지 처음에 헷갈렸던 부분
+        setName(nextName);
+        setIsEditingName(false);
+        localStorage.setItem(
+            "userProfile",
+            JSON.stringify({ name: nextName, email, joinedAt })
+        );
+    }
+    const cancelEditName = () => {
+        setNameDraft(name);
+        setIsEditingName(false);
     }
 
     return(
@@ -55,8 +95,27 @@ export function ProfileBox(){
             type="file" // 진짜 프로필 input
             onChange={ImgChange}></ProfileInput> 
             <NameEmailBox>
-                <Email>{email}
-                </Email>
+                <NameRow>
+                    {isEditingName ? (
+                        <NameInput
+                        ref={nameInputRef}
+                        value={nameDraft}
+                        onChange={(e)=>setNameDraft(e.target.value)}
+                        onBlur={saveName}
+                        onKeyDown={(e)=>{
+                            if(e.key === "Enter") saveName();
+                            if(e.key === "Escape") cancelEditName();
+                        }}/>
+                    ) : (
+                        <>
+                            <Name>{name || "닉네임 없음"}</Name>
+                            <NameEditIcon
+                            src={profileEdit}
+                            onClick={startEditName}/>
+                        </>
+                    )}
+                </NameRow>
+                <Email>{email}</Email>
             </NameEmailBox>
             <LogoutTextBox
             onClick={()=>setIsLogin(true)}
@@ -78,10 +137,13 @@ export function ProfileBox(){
     )
 }
 const Body = styled.div`
-    width:1000px;
+    width:96%;
+    max-width:1500px;
+    min-width:560px;
     height:220px;
     background-color: #fff;
-    box-shadow: 0 4px 10px 4px rgba(0, 0, 0, 0.03);
+    border:1.5px solid #EFEFEF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     border-radius:20px;
 
     display:flex;
@@ -131,10 +193,40 @@ const ProfileEditImg = styled.img`
     width:20px;
 `
 const NameEmailBox = styled.div`
-    
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    flex:1;
+    margin-left:30px;
+`
+const NameRow = styled.div`
+    display:flex;
+    align-items:center;
+    gap:8px;
+`
+const Name = styled.div`
+    font-size:20px;
+    font-weight:700;
+    color:#222;
+`
+const NameEditIcon = styled.img`
+    width:16px;
+    cursor:pointer;
+`
+const NameInput = styled.input`
+    font-size:20px;
+    font-weight:700;
+    color:#222;
+    border:none;
+    outline:none;
+    border-bottom:2px solid #FF7EB6;
+    font-family:inherit;
+    background:none;
+    width:200px;
 `
 const Email = styled.div`
-    
+    font-size:14px;
+    color:#989898;
 `
 const LogoutTextBox = styled.div`
     width:100px;

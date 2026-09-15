@@ -30,7 +30,7 @@ export function LogOutBox({ email, onCancel, onConfirm }: LogOutBoxProps) {
 }
 const Body = styled.div`
     width:100%;
-    height:100%;
+    height:200vh;
     background-color:rgba(0,0,0,0.4);
     
     position:absolute;
@@ -47,7 +47,7 @@ const LogoutBox = styled.div`
     display:flex;
     justify-content:center;
     flex-direction:column;
-
+    margin-top:300px;
     gap:20px;
 `
 const Img = styled.img`

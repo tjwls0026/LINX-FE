@@ -113,7 +113,7 @@ export function FolderCollection({
                     >
                         <MoreButton
                             onClick={(e) => {
-                                e.stopPropagation();
+                                e.stopPropagation(); // 버블링(다른 부모 요소의 클릭 동작이 같이 실행되는 걸 방지)
                                 setOpenMenuId(openMenuId === folder.id ? null : folder.id);
                             }}
                         >
@@ -121,7 +121,7 @@ export function FolderCollection({
                         </MoreButton>
                         {openMenuId === folder.id && (
                             <FolderMenu
-                                onRename={() => startRename(folder)}
+                                onRename={() => startRename(folder)} 
                                 onDelete={() => { onDeleteFolder(folder.id); setOpenMenuId(null); }}
                             />
                         )}
@@ -209,9 +209,6 @@ const MoreButton = styled.div`
     font-size:18px;
     cursor:pointer;
     border-radius:50%;
-    &:hover{
-        background-color:#ededed;
-    }
 `
 const AddText = styled.div`
     width:85%;

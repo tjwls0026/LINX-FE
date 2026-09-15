@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 interface IdCodeButtonProps {
     onLoginClick?: () => void;
     code?: string;   // 추가
+    email?: string;  // step1에서 입력한 이메일을 step3까지 전달
 }
 
-export function IdCodeButton({onLoginClick, code }: IdCodeButtonProps) {
+export function IdCodeButton({onLoginClick, code, email }: IdCodeButtonProps) {
     const navigate = useNavigate();
 
     const goLogIn=()=>{
@@ -14,7 +15,7 @@ export function IdCodeButton({onLoginClick, code }: IdCodeButtonProps) {
         navigate("/LogIn");
     }
     const functionNavigate = () => {
-        navigate("/SignUp/step3", { state: { code } });
+        navigate("/SignUp/step3", { state: { email, code } });
     }
     return (
         <All>

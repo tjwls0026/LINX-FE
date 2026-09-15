@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 
 import { TextBox } from "../TextBox";
 import { SignUpButton } from "./SignUpbutton";
@@ -6,7 +7,21 @@ import { SignUpButton } from "./SignUpbutton";
 import name from "../../assets/name.svg"
 import { PassWordInput } from "./PasswordInput";
 
-export function SignUpText() {
+interface SignUpTextProps {
+    email: string;
+}
+
+export function SignUpText({ email }: SignUpTextProps) {
+    const [nickname, setNickname] = useState("");
+
+    const handleSignUp = () => {
+        // 마이페이지에서 보여줄 수 있도록 회원가입 정보를 저장
+        localStorage.setItem(
+            "userProfile",
+            JSON.stringify({ name: nickname, email, joinedAt: Date.now() })
+        );
+    }
+
     return(
         <Body>
             <div>
@@ -19,14 +34,17 @@ export function SignUpText() {
                     <Title>닉네임</Title>
                     <TextBox>
                         <Logo src={name}/>
-                        <Input placeholder="닉네임을 입력하세요."/>
+                        <Input
+                        placeholder="닉네임을 입력하세요."
+                        value={nickname}
+                        onChange={(e)=>setNickname(e.target.value)}/>
                     </TextBox>
                 </Box>
                 
             </TextBoxAll>
             <PassWordInput/>
             </Div>
-            <SignUpButton/>
+            <SignUpButton onSignUp={handleSignUp}/>
         </Body>
     )
 }

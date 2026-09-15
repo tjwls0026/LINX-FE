@@ -33,7 +33,7 @@ export function SortDropdown({ value, onChange }: SortDropdownProps) {
 
     return (
         <Wrap ref={wrapRef}> 
-            <Trigger onClick={() => setIsOpen((prev) => !prev)}>  // 기존에 있던 값과 반대로 작용
+            <Trigger onClick={() => setIsOpen((prev) => !prev)}> 
                 <span>▼</span>
                 <p>{currentLabel}</p>
             </Trigger>

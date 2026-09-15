@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MiniLogoBox } from "../Components/MiniLogo"
 import { FolderCollection } from "../Components/main/FolderCollection"
 import { SearchBox } from "../Components/main/SearchBox";
@@ -11,11 +11,24 @@ import type {Folder, Link} from  "../Components/types/link"
 export function MainPage () {
     const navigate = useNavigate(); // 클릭시 다른 페이지로 이동
 
-    const [folders, setFolders] = useState<Folder[]>([
-        
-    ]);
+    const [folders, setFolders] = useState<Folder[]>(() => {
+        // 마이페이지 통계에서도 쓸 수 있도록 로컬스토리지에서 불러온다
+        const stored = localStorage.getItem("folders");
+        return stored ? (JSON.parse(stored) as Folder[]) : [];
+    });
     const [selectedFolder, setSelectedFolder] = useState<number | "all">("all"); // 폴더 목록
-    const [links, setLinks] = useState<Link[]>([]); //저장된 링크 목록
+    const [links, setLinks] = useState<Link[]>(() => {
+        const stored = localStorage.getItem("links");
+        return stored ? (JSON.parse(stored) as Link[]) : [];
+    }); //저장된 링크 목록
+
+    useEffect(() => {
+        localStorage.setItem("folders", JSON.stringify(folders));
+    }, [folders]);
+
+    useEffect(() => {
+        localStorage.setItem("links", JSON.stringify(links));
+    }, [links]);
 
     const handleAddFolder = (name: string) => {
         setFolders(prev => [...prev, { id: Date.now(), name }]); //  폴더 추가 함수
@@ -53,8 +66,8 @@ export function MainPage () {
 
     const handleDeleteFolder = (id: number) => {
         setFolders(prev => prev.filter(folder => folder.id !== id)); // id가 같지 않은것 빼고 삭제
-        setLinks(prev => prev.map(link => (link.folderId === id ? { ...link, folderId: null } : link)));
-        setSelectedFolder(prev => (prev === id ? "all" : prev));
+        setLinks(prev => prev.map(link => (link.folderId === id ? { ...link, folderId: null } : link))); // 폴더가 삭제될때 그 안에 있던 링크들의 folderId를 null로 바꿔줌. 이거 안하면 없는 폴더 id를 링크가 계속 들고있게 돼서 꼬임 (여기 처음에 왜 필요한지 헷갈렸음)
+        setSelectedFolder(prev => (prev === id ? "all" : prev)); // 지금 보고있던 폴더가 방금 삭제한 폴더면 전체보기로 되돌림, 아니면 그대로 둠. setState에 함수를 넣어서 이전값(prev)을 직접 비교하는 부분이 어려웠음
     }; // 폴더 삭제 
 
     const handleGoProfile=()=>{

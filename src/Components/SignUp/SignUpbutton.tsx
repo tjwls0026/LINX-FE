@@ -1,18 +1,26 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 
-export function SignUpButton() {
+interface SignUpButtonProps {
+    onSignUp?: () => void;
+}
+
+export function SignUpButton({ onSignUp }: SignUpButtonProps) {
 
     const navigate = useNavigate();
 
     const goLogIn=()=>{
         navigate("/LogIn");
     }
+    const handleSignUp=()=>{
+        onSignUp?.();
+        navigate("/LogIn");
+    }
     return(
         <All>
             <Body>
                 <Text
-                onClick={goLogIn}>회원가입</Text>
+                onClick={handleSignUp}>회원가입</Text>
             </Body>
             <Explanation>
                     <AfterSignUp>이미 회원이신가요?</AfterSignUp>

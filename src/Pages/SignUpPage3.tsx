@@ -1,16 +1,20 @@
 import styled from "@emotion/styled"
 import '../css/AllMargin.css'
 
+import { useLocation } from "react-router-dom"
 import { Logo } from "../Components/Logo"
 import { BackgroundBox } from "../Components/BackgroundBox"
 import { SignUpText } from "../Components/SignUp/SignUpText"   
 
 export function SignUpPage3() {
+    const location = useLocation();
+    const { email } = (location.state as { email?: string; code?: string }) ?? {};
+
     return(
         <Body>
             <Logo/>
             <BackgroundBox>
-                <SignUpText/>
+                <SignUpText email={email ?? ""}/>
             </BackgroundBox>
             
         </Body>

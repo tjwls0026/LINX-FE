@@ -13,14 +13,14 @@ interface Link{
     memo:string|null;
     img;
     pinned:boolean;
-    clickCount:number;
+    clickCount:number; // 타입 선언
 }
 interface LinkBoxProps{
     link:Link;
     onDelete : ()=>void;
     onEdit : () =>  void;
     onTogglePin : () => void;
-    onClickLink? : () => void;
+    onClickLink? : () => void; 
 }
 export function LinkBox({link,onDelete,onEdit,onTogglePin,onClickLink}:LinkBoxProps) {
     const [isSetting,setIsSetting] = useState(false);
@@ -29,7 +29,7 @@ export function LinkBox({link,onDelete,onEdit,onTogglePin,onClickLink}:LinkBoxPr
         navigator.clipboard.writeText(link.url);
         alert("링크가 복사되었습니다")
     }
-    const Link = () => {
+    const Link = () => { // 주의: 위에 선언한 interface Link랑 이름이 완전히 같음. 타입이랑 값(함수)은 이름공간이 달라서 에러는 안나지만 나중에 헷갈리기 딱 좋은 부분(함수명 바꾸는게 나을듯)
         window.open(link.url,"_blank");
         onClickLink?.();
         setIsSetting(false);
